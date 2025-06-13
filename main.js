@@ -56,7 +56,7 @@ loginForm.onsubmit = async (e) => {
 logoutBtn.onclick = async () => {
   await client.auth.signOut();
   alert("Logged out.");
-  location.reload(); // reset UI
+  location.reload(); 
 };
 
 changePasswordForm.onsubmit = async (e) => {
@@ -84,7 +84,7 @@ promoteForm.onsubmit = async (e) => {
 };
 
 
-// === REPORTS: ADMIN ===
+// REPORTS: ADMIN 
 document.getElementById("reportCountEmployees").onclick = async () => {
   const { data, error } = await client.rpc("count_employees");
   alert(error ? error.message : `Total employees: ${data}`);
@@ -106,7 +106,7 @@ document.getElementById("reportSumPayments").onclick = async () => {
   alert(error ? error.message : `Sum of payments: ${data}`);
 };
 
-// === REPORTS: USER ===
+// REPORTS: USER 
 document.getElementById("reportCountFeedback").onclick = async () => {
   const { data, error } = await client.rpc("count_feedback");
   alert(error ? error.message : `Total feedbacks: ${data}`);
@@ -128,7 +128,7 @@ document.getElementById("reportSumRating").onclick = async () => {
   alert(error ? error.message : `Sum of ratings: ${data}`);
 };
 
-// === EMPLOYEE ===
+// EMPLOYEE 
 employeeInsertForm.onsubmit = async (e) => {
   e.preventDefault();
   await client.from("employee").insert([{
@@ -152,7 +152,7 @@ employeeUpdateForm.onsubmit = async (e) => {
   alert("Phone updated");
 };
 
-// === SALESPERSON ===
+// SALESPERSON 
 salespersonInsertForm.onsubmit = async (e) => {
   e.preventDefault();
   await client.from("salesperson").insert([{
@@ -175,7 +175,7 @@ salespersonUpdateForm.onsubmit = async (e) => {
   alert("Salesperson phone updated");
 };
 
-// === PURCHASE ===
+// PURCHASE 
 purchaseInsertForm.onsubmit = async (e) => {
   e.preventDefault();
   await client.from("purchase").insert([{
@@ -198,7 +198,7 @@ purchaseUpdateForm.onsubmit = async (e) => {
   alert("Purchase date updated");
 };
 
-// === PAYMENT ===
+// PAYMENT 
 paymentInsertForm.onsubmit = async (e) => {
   e.preventDefault();
   await client.from("payment").insert([{
@@ -222,7 +222,7 @@ paymentUpdateForm.onsubmit = async (e) => {
   alert("Payment status updated");
 };
 
-// === FEEDBACK ===
+// FEEDBACK 
 feedbackInsertForm.onsubmit = async (e) => {
   e.preventDefault();
   await client.from("feedback").insert([{
@@ -246,7 +246,7 @@ feedbackUpdateForm.onsubmit = async (e) => {
   alert("Feedback updated");
 };
 
-// === CUSTOMER ===
+// CUSTOMER 
 customerInsertForm.onsubmit = async (e) => {
   e.preventDefault();
   await client.from("customer").insert([{
@@ -270,7 +270,7 @@ customerUpdateForm.onsubmit = async (e) => {
   alert("Customer phone updated");
 };
 
-// === CAR ===
+// CAR 
 carInsertForm.onsubmit = async (e) => {
   e.preventDefault();
   await client.from("car").insert([{
