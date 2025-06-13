@@ -3,191 +3,237 @@
 <head>
   <meta charset="UTF-8">
   <title>Honda Dealership Manager</title>
-  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.6/dist/umd/supabase.min.js"></script>
+  <style>
+    /* hide both until we know your role */
+    #adminOnly, #userOnly { display: none; margin-bottom: 2rem; }
+    button.report { margin: 0.25rem; }
+  </style>
 </head>
 <body>
-  <!-- Session check and redirect to login/signup page if not signed in -->
-  <script>
-    const supabaseUrl = 'https://vnvitfftrgicalvsffwr.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudml0ZmZ0cmdpY2FsdnNmZndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0OTY1MjEsImV4cCI6MjA2NTA3MjUyMX0.3S8Bn8NUaeb3rjYaaTrQVy0IaWQVlX_wq0GvQAhQCgg';
-    const client = supabase.createClient(supabaseUrl, supabaseKey);
-    client.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        window.location.href = 'auth.html';
-      }
-    });
-  </script>
 
-  <h1>Honda Dealership Manager</h1>
-  <button id="logoutBtn">Log Out</button>
+  <h1>Honda Dealership Management</h1>
 
-  <!-- EMPLOYEE -->
-  <h2>Add Employee</h2>
-  <form id="employeeInsertForm">
-    <input type="text" id="empName" placeholder="Name"><br>
-    <input type="text" id="empTitle" placeholder="Title"><br>
-    <input type="text" id="empSSN" placeholder="SSN"><br>
-    <input type="text" id="empPhone" placeholder="Phone"><br>
-    <input type="text" id="empAddress" placeholder="Address"><br>
-    <button type="submit">Add Employee</button>
+  <!-- AUTH -->
+  <h2>Sign Up</h2>
+  <form id="signupForm">
+    <input type="email" id="signupEmail" placeholder="Email"><br>
+    <input type="password" id="signupPassword" placeholder="Password"><br>
+    <button type="submit">Sign Up</button>
   </form>
 
-  <h2>Delete Employee</h2>
-  <form id="employeeDeleteForm">
-    <input type="text" id="empDeleteId" placeholder="Employee Name"><br>
-    <button type="submit">Delete Employee</button>
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="email" id="loginEmail" placeholder="Email"><br>
+    <input type="password" id="loginPassword" placeholder="Password"><br>
+    <button type="submit">Login</button>
   </form>
 
-  <h2>Update Employee Phone</h2>
-  <form id="employeeUpdateForm">
-    <input type="text" id="empUpdateName" placeholder="Employee Name"><br>
-    <input type="text" id="empNewPhone" placeholder="New Phone"><br>
-    <button type="submit">Update Phone</button>
+  <h2>Change Password</h2>
+  <form id="changePasswordForm">
+    <input type="password" id="newPassword" placeholder="New Password"><br>
+    <button type="submit">Change Password</button>
   </form>
 
-  <!-- CUSTOMER -->
-  <h2>Add Customer</h2>
-  <form id="customerInsertForm">
-    <input type="text" id="custName" placeholder="Name"><br>
-    <input type="email" id="custEmail" placeholder="Email"><br>
-    <input type="text" id="custPhone" placeholder="Phone"><br>
-    <input type="text" id="custAddress" placeholder="Address"><br>
-    <input type="number" id="custSalespersonId" placeholder="Salesperson ID"><br>
-    <button type="submit">Add Customer</button>
-  </form>
+  <h2>Logout</h2>
+  <button id="logoutBtn">Logout</button>
 
-  <h2>Delete Customer</h2>
-  <form id="customerDeleteForm">
-    <input type="text" id="custDeleteName" placeholder="Customer Name"><br>
-    <button type="submit">Delete Customer</button>
-  </form>
+  <!-- ADMIN ONLY SECTION -->
+  <div id="adminOnly">
 
-  <h2>Update Customer Phone</h2>
-  <form id="customerUpdateForm">
-    <input type="text" id="custUpdateName" placeholder="Customer Name"><br>
-    <input type="text" id="custNewPhone" placeholder="New Phone"><br>
-    <button type="submit">Update Phone</button>
-  </form>
+    <h2>Admin Reports</h2>
+    <button class="report" id="reportCountEmployees">Count Employees</button>
+    <button class="report" id="reportMinPrice">Min Car Price</button>
+    <button class="report" id="reportMaxPrice">Max Car Price</button>
+    <button class="report" id="reportAvgPrice">Avg Car Price</button>
+    <button class="report" id="reportSumPayments">Sum of Payments</button>
 
-  <!-- CAR -->
-  <h2>Add Car</h2>
-  <form id="carInsertForm">
-    <input type="text" id="carVIN" placeholder="VIN"><br>
-    <input type="number" step="0.01" id="carPrice" placeholder="Price"><br>
-    <input type="text" id="carMake" placeholder="Make"><br>
-    <input type="text" id="carModel" placeholder="Model"><br>
-    <input type="number" id="carYear" placeholder="Year"><br>
-    <input type="number" id="carEmployeeId" placeholder="Employee ID"><br>
-    <button type="submit">Add Car</button>
-  </form>
+    <h2>Promote to Admin</h2>
+    <form id="promoteForm">
+      <input type="text" id="promoteUserId" placeholder="User ID (UUID)"><br>
+      <button type="submit">Promote</button>
+    </form>
 
-  <h2>Delete Car</h2>
-  <form id="carDeleteForm">
-    <input type="text" id="carDeleteVIN" placeholder="VIN"><br>
-    <button type="submit">Delete Car</button>
-  </form>
+    <!-- EMPLOYEE -->
+    <h2>Add Employee</h2>
+    <form id="employeeInsertForm">
+      <input type="text" id="empName" placeholder="Name"><br>
+      <input type="text" id="empTitle" placeholder="Title"><br>
+      <input type="text" id="empSSN" placeholder="SSN"><br>
+      <input type="text" id="empPhone" placeholder="Phone"><br>
+      <input type="text" id="empAddress" placeholder="Address"><br>
+      <button type="submit">Add Employee</button>
+    </form>
 
-  <h2>Update Car Price</h2>
-  <form id="carUpdateForm">
-    <input type="text" id="carUpdateVIN" placeholder="VIN"><br>
-    <input type="number" step="0.01" id="carNewPrice" placeholder="New Price"><br>
-    <button type="submit">Update Price</button>
-  </form>
+    <h2>Delete Employee</h2>
+    <form id="employeeDeleteForm">
+      <input type="text" id="empDeleteId" placeholder="Employee Name"><br>
+      <button type="submit">Delete Employee</button>
+    </form>
 
-  <!-- SALESPERSON -->
-  <h2>Add Salesperson</h2>
-  <form id="salespersonInsertForm">
-    <input type="number" id="salespersonId" placeholder="Employee ID (also Salesperson ID)"><br>
-    <input type="text" id="salespersonName" placeholder="Name"><br>
-    <input type="email" id="salespersonEmail" placeholder="Email"><br>
-    <input type="text" id="salespersonPhone" placeholder="Phone"><br>
-    <button type="submit">Add Salesperson</button>
-  </form>
+    <h2>Update Employee Phone</h2>
+    <form id="employeeUpdateForm">
+      <input type="text" id="empUpdateName" placeholder="Employee Name"><br>
+      <input type="text" id="empNewPhone" placeholder="New Phone"><br>
+      <button type="submit">Update Phone</button>
+    </form>
 
-  <h2>Delete Salesperson</h2>
-  <form id="salespersonDeleteForm">
-    <input type="text" id="salespersonDeleteName" placeholder="Salesperson Name"><br>
-    <button type="submit">Delete Salesperson</button>
-  </form>
+    <!-- SALESPERSON -->
+    <h2>Add Salesperson</h2>
+    <form id="salespersonInsertForm">
+      <input type="number" id="salespersonId" placeholder="Employee ID as Salesperson ID"><br>
+      <input type="text" id="salespersonName" placeholder="Name"><br>
+      <input type="email" id="salespersonEmail" placeholder="Email"><br>
+      <input type="text" id="salespersonPhone" placeholder="Phone"><br>
+      <button type="submit">Add Salesperson</button>
+    </form>
 
-  <h2>Update Salesperson Phone</h2>
-  <form id="salespersonUpdateForm">
-    <input type="number" id="salespersonUpdateId" placeholder="Salesperson ID"><br>
-    <input type="text" id="salespersonNewPhone" placeholder="New Phone"><br>
-    <button type="submit">Update Phone</button>
-  </form>
+    <h2>Delete Salesperson</h2>
+    <form id="salespersonDeleteForm">
+      <input type="text" id="salespersonDeleteName" placeholder="Salesperson Name"><br>
+      <button type="submit">Delete Salesperson</button>
+    </form>
 
-  <!-- PURCHASE -->
-  <h2>Add Purchase</h2>
-  <form id="purchaseInsertForm">
-    <input type="date" id="purchaseDate"><br>
-    <input type="number" id="purchaseCustomerId" placeholder="Customer ID"><br>
-    <input type="text" id="purchaseVIN" placeholder="Car VIN"><br>
-    <input type="number" id="purchaseSalespersonId" placeholder="Salesperson ID"><br>
-    <button type="submit">Add Purchase</button>
-  </form>
+    <h2>Update Salesperson Phone</h2>
+    <form id="salespersonUpdateForm">
+      <input type="number" id="salespersonUpdateId" placeholder="Salesperson ID"><br>
+      <input type="text" id="salespersonNewPhone" placeholder="New Phone"><br>
+      <button type="submit">Update Phone</button>
+    </form>
 
-  <h2>Delete Purchase</h2>
-  <form id="purchaseDeleteForm">
-    <input type="number" id="purchaseDeleteId" placeholder="Purchase ID"><br>
-    <button type="submit">Delete Purchase</button>
-  </form>
+    <!-- PURCHASE -->
+    <h2>Add Purchase</h2>
+    <form id="purchaseInsertForm">
+      <input type="date" id="purchaseDate"><br>
+      <input type="number" id="purchaseCustomerId" placeholder="Customer ID"><br>
+      <input type="text" id="purchaseVIN" placeholder="Car VIN"><br>
+      <input type="number" id="purchaseSalespersonId" placeholder="Salesperson ID"><br>
+      <button type="submit">Add Purchase</button>
+    </form>
 
-  <h2>Update Purchase Date</h2>
-  <form id="purchaseUpdateForm">
-    <input type="number" id="purchaseUpdateId" placeholder="Purchase ID"><br>
-    <input type="date" id="purchaseNewDate"><br>
-    <button type="submit">Update Date</button>
-  </form>
+    <h2>Delete Purchase</h2>
+    <form id="purchaseDeleteForm">
+      <input type="number" id="purchaseDeleteId" placeholder="Purchase ID"><br>
+      <button type="submit">Delete Purchase</button>
+    </form>
 
-  <!-- PAYMENT -->
-  <h2>Add Payment</h2>
-  <form id="paymentInsertForm">
-    <input type="date" id="paymentDate"><br>
-    <input type="number" step="0.01" id="paymentAmount" placeholder="Amount"><br>
-    <input type="text" id="paymentMethod" placeholder="Method"><br>
-    <input type="text" id="paymentStatus" placeholder="Status"><br>
-    <input type="number" id="paymentPurchaseId" placeholder="Purchase ID"><br>
-    <button type="submit">Add Payment</button>
-  </form>
+    <h2>Update Purchase Date</h2>
+    <form id="purchaseUpdateForm">
+      <input type="number" id="purchaseUpdateId" placeholder="Purchase ID"><br>
+      <input type="date" id="purchaseNewDate"><br>
+      <button type="submit">Update Date</button>
+    </form>
 
-  <h2>Delete Payment</h2>
-  <form id="paymentDeleteForm">
-    <input type="number" id="paymentDeleteId" placeholder="Payment ID"><br>
-    <button type="submit">Delete Payment</button>
-  </form>
+    <!-- PAYMENT -->
+    <h2>Add Payment</h2>
+    <form id="paymentInsertForm">
+      <input type="date" id="paymentDate"><br>
+      <input type="number" step="0.01" id="paymentAmount" placeholder="Amount"><br>
+      <input type="text" id="paymentMethod" placeholder="Method"><br>
+      <input type="text" id="paymentStatus" placeholder="Status"><br>
+      <input type="number" id="paymentPurchaseId" placeholder="Purchase ID"><br>
+      <button type="submit">Add Payment</button>
+    </form>
 
-  <h2>Update Payment Status</h2>
-  <form id="paymentUpdateForm">
-    <input type="number" id="paymentUpdateId" placeholder="Payment ID"><br>
-    <input type="text" id="paymentNewStatus" placeholder="New Status"><br>
-    <button type="submit">Update Status</button>
-  </form>
+    <h2>Delete Payment</h2>
+    <form id="paymentDeleteForm">
+      <input type="number" id="paymentDeleteId" placeholder="Payment ID"><br>
+      <button type="submit">Delete Payment</button>
+    </form>
 
-  <!-- FEEDBACK -->
-  <h2>Add Feedback</h2>
-  <form id="feedbackInsertForm">
-    <input type="number" id="feedbackRating" placeholder="Rating (1-5)" min="1" max="5"><br>
-    <input type="date" id="feedbackDate"><br>
-    <input type="text" id="feedbackComments" placeholder="Comments"><br>
-    <input type="number" id="feedbackCustomerId" placeholder="Customer ID"><br>
-    <input type="number" id="feedbackSalespersonId" placeholder="Salesperson ID"><br>
-    <button type="submit">Add Feedback</button>
-  </form>
+    <h2>Update Payment Status</h2>
+    <form id="paymentUpdateForm">
+      <input type="number" id="paymentUpdateId" placeholder="Payment ID"><br>
+      <input type="text" id="paymentNewStatus" placeholder="New Status"><br>
+      <button type="submit">Update Status</button>
+    </form>
 
-  <h2>Delete Feedback</h2>
-  <form id="feedbackDeleteForm">
-    <input type="number" id="feedbackDeleteId" placeholder="Feedback ID"><br>
-    <button type="submit">Delete Feedback</button>
-  </form>
+    <!-- FEEDBACK -->
+    <h2>Add Feedback</h2>
+    <form id="feedbackInsertForm">
+      <input type="number" id="feedbackRating" placeholder="Rating (1–5)"><br>
+      <input type="date" id="feedbackDate"><br>
+      <input type="text" id="feedbackComments" placeholder="Comments"><br>
+      <input type="number" id="feedbackCustomerId" placeholder="Customer ID"><br>
+      <input type="number" id="feedbackSalespersonId" placeholder="Salesperson ID"><br>
+      <button type="submit">Add Feedback</button>
+    </form>
 
-  <h2>Update Feedback Rating</h2>
-  <form id="feedbackUpdateForm">
-    <input type="number" id="feedbackUpdateId" placeholder="Feedback ID"><br>
-    <input type="number" id="feedbackNewRating" placeholder="New Rating" min="1" max="5"><br>
-    <button type="submit">Update Rating</button>
-  </form>
+    <h2>Delete Feedback</h2>
+    <form id="feedbackDeleteForm">
+      <input type="number" id="feedbackDeleteId" placeholder="Feedback ID"><br>
+      <button type="submit">Delete Feedback</button>
+    </form>
+
+    <h2>Update Feedback Rating</h2>
+    <form id="feedbackUpdateForm">
+      <input type="number" id="feedbackUpdateId" placeholder="Feedback ID"><br>
+      <input type="number" id="feedbackNewRating" placeholder="New Rating (1–5)"><br>
+      <button type="submit">Update Rating</button>
+    </form>
+
+  </div>
+
+  <!-- USER ONLY SECTION -->
+  <div id="userOnly">
+
+    <h2>User Reports</h2>
+    <button class="report" id="reportCountFeedback">Count Feedback</button>
+    <button class="report" id="reportMinRating">Min Feedback Rating</button>
+    <button class="report" id="reportMaxRating">Max Feedback Rating</button>
+    <button class="report" id="reportAvgRating">Avg Feedback Rating</button>
+    <button class="report" id="reportSumRating">Sum Feedback Rating</button>
+
+    <!-- CUSTOMER -->
+    <h2>Add Customer</h2>
+    <form id="customerInsertForm">
+      <input type="text" id="custName" placeholder="Name"><br>
+      <input type="email" id="custEmail" placeholder="Email"><br>
+      <input type="text" id="custPhone" placeholder="Phone"><br>
+      <input type="text" id="custAddress" placeholder="Address"><br>
+      <input type="number" id="custSalespersonId" placeholder="Salesperson ID"><br>
+      <button type="submit">Add Customer</button>
+    </form>
+
+    <h2>Delete Customer</h2>
+    <form id="customerDeleteForm">
+      <input type="text" id="custDeleteName" placeholder="Customer Name"><br>
+      <button type="submit">Delete Customer</button>
+    </form>
+
+    <h2>Update Customer Phone</h2>
+    <form id="customerUpdateForm">
+      <input type="text" id="custUpdateName" placeholder="Customer Name"><br>
+      <input type="text" id="custNewPhone" placeholder="New Phone"><br>
+      <button type="submit">Update Phone</button>
+    </form>
+
+    <!-- CAR -->
+    <h2>Add Car</h2>
+    <form id="carInsertForm">
+      <input type="text" id="carVIN" placeholder="VIN"><br>
+      <input type="number" step="0.01" id="carPrice" placeholder="Price"><br>
+      <input type="text" id="carMake" placeholder="Make"><br>
+      <input type="text" id="carModel" placeholder="Model"><br>
+      <input type="number" id="carYear" placeholder="Year"><br>
+      <input type="number" id="carEmployeeId" placeholder="Employee ID"><br>
+      <button type="submit">Add Car</button>
+    </form>
+
+    <h2>Delete Car</h2>
+    <form id="carDeleteForm">
+      <input type="text" id="carDeleteVIN" placeholder="VIN"><br>
+      <button type="submit">Delete Car</button>
+    </form>
+
+    <h2>Update Car Price</h2>
+    <form id="carUpdateForm">
+      <input type="text" id="carUpdateVIN" placeholder="VIN"><br>
+      <input type="number" step="0.01" id="carNewPrice" placeholder="New Price"><br>
+      <button type="submit">Update Price</button>
+    </form>
+
+  </div>
 
   <script src="main.js"></script>
 </body>
