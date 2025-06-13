@@ -1,32 +1,31 @@
 /* Base styling */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: "Avenir Next Rounded", "Avenir Next", "Avenir", "Helvetica Neue", Arial, sans-serif;
+  background-color: #FFFAF0;
   color: #333;
   margin: 0;
   padding: 20px;
 }
 h1 {
-  color: #D32F2F; /* Honda red */
+  color: #CC0000; /* Honda red brand color */
   text-align: center;
 }
 h2 {
-  color: #C62828;
+  color: #CC0000;
   margin-top: 40px;
 }
 
 /* Form container */
 form {
-  background: #fff;
+  background: #FFFFFF;
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Inputs and buttons */
-input,
-button {
+/* Inputs/buttons */
+input, button {
   display: block;
   width: 100%;
   padding: 8px;
@@ -37,19 +36,12 @@ button {
 }
 
 button {
-  background-color: #D32F2F;
+  background-color: #CC0000;
   color: #fff;
   border: none;
   cursor: pointer;
 }
-button:hover {
-  background-color: #B71C1C;
-}
 
-/* Admin panel styling */
-#adminPanel {
-  border: 2px solid #C62828;
-  padding: 10px;
-  border-radius: 6px;
-  background: #ffeeee;
+button:hover {
+  background-color: #CC0000;
 }

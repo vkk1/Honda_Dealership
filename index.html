@@ -7,8 +7,20 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.6/dist/umd/supabase.min.js"></script>
 </head>
 <body>
+  <!-- Session check and redirect to login/signup page if not signed in -->
+  <script>
+    const supabaseUrl = 'https://vnvitfftrgicalvsffwr.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudml0ZmZ0cmdpY2FsdnNmZndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0OTY1MjEsImV4cCI6MjA2NTA3MjUyMX0.3S8Bn8NUaeb3rjYaaTrQVy0IaWQVlX_wq0GvQAhQCgg';
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
+    client.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        window.location.href = 'auth.html';
+      }
+    });
+  </script>
 
-  <h1>Honda Dealership</h1>
+  <h1>Honda Dealership Manager</h1>
+  <button id="logoutBtn">Log Out</button>
 
   <!-- EMPLOYEE -->
   <h2>Add Employee</h2>
